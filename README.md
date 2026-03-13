@@ -18,6 +18,46 @@
 
 </div>
 
+## Fork Features
+
+
+### Multi-page holograms
+
+Example `holograms.yml`:
+
+```yaml
+text:
+  pages:
+    1:
+      - Text
+      - Text
+    2:
+      - Text
+      - Text
+  navigation:
+    enabled: true
+    position: "bottom"    # bottom|top|hidden
+    showIfSingle: false
+    prevText: "<<"
+    nextText: ">>"
+    separator: " {page}/{pages} "
+    npcs:
+      next: "NpcForward"  # 1-2-3-1-2-3
+      prev: "NpcBack"     # 3-2-1-3-2-1
+```
+
+### Page switching via NPC
+
+- Clicking the NPC from `text.navigation.npcs.next` goes forward.
+- Clicking the NPC from `text.navigation.npcs.prev` goes backward.
+- The `<< >>` line shows immediately after restart when `navigation.enabled: true`.
+
+### Clickable toggle
+
+```
+/hologram edit <name> clickable <true|false>
+```
+
 ## FancyPlugins
 
 This is a [monorepo](docs/src/development-guidelines/monorepo.md) for all plugins, libraries, and tools of FancyInnovations.
