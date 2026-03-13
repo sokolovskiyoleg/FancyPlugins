@@ -168,7 +168,7 @@ public final class HologramCMD extends Command {
 
         // /holo edit [hologram] [option] {tab:contextual}
         if (args.length == 4) {
-            final var suggestions = switch (args[2].toLowerCase(Locale.ROOT)) {
+            Stream<String> suggestions = switch (args[2].toLowerCase(Locale.ROOT)) {
                 case "billboard" -> {
                     final var values = new ArrayList<>(List.of(Display.Billboard.values()));
 
@@ -219,6 +219,7 @@ public final class HologramCMD extends Command {
                 }
                 case "block" -> Arrays.stream(Material.values()).filter(Material::isBlock).map(Enum::name);
                 case "seethrough" -> Stream.of("true", "false");
+                case "clickable" -> Stream.of("true", "false");
                 case "visibility" -> new VisibilityCMD().tabcompletion(sender, hologram, args).stream();
 
                 default -> null;
@@ -339,6 +340,7 @@ public final class HologramCMD extends Command {
             case "textshadow" -> new TextShadowCMD().run(player, hologram, args);
             case "textalignment" -> new TextAlignmentCMD().run(player, hologram, args);
             case "seethrough" -> new SeeThroughCMD().run(player, hologram, args);
+            case "clickable" -> new ClickableCMD().run(player, hologram, args);
 
             // block data
             case "block" -> new BlockCMD().run(player, hologram, args);

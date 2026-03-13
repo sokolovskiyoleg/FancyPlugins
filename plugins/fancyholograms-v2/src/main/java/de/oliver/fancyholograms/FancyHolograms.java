@@ -19,6 +19,7 @@ import de.oliver.fancyholograms.commands.FancyHologramsTestCMD;
 import de.oliver.fancyholograms.commands.HologramCMD;
 import de.oliver.fancyholograms.hologram.version.HologramImpl;
 import de.oliver.fancyholograms.listeners.*;
+import de.oliver.fancyholograms.pages.HologramPageService;
 import de.oliver.fancyholograms.storage.FlatFileHologramStorage;
 import de.oliver.fancyholograms.storage.converter.FHConversionRegistry;
 import de.oliver.fancyholograms.util.PluginUtils;
@@ -72,6 +73,7 @@ public final class FancyHolograms extends JavaPlugin implements FancyHologramsPl
     private HologramConfiguration configuration = new FancyHologramsConfiguration();
     private HologramStorage hologramStorage = new FlatFileHologramStorage();
     private @Nullable HologramManagerImpl hologramsManager;
+    private final HologramPageService hologramPageService = new HologramPageService(this);
 
     public FancyHolograms() {
         INSTANCE = this;
@@ -183,6 +185,7 @@ public final class FancyHolograms extends JavaPlugin implements FancyHologramsPl
         hologramsManager.saveHolograms();
         hologramThread.shutdown();
         fileStorageExecutor.shutdown();
+        hologramPageService.clear();
         INSTANCE = null;
 
         fancyLogger.info("Successfully disabled FancyHolograms version %s".formatted(getDescription().getVersion()));
@@ -204,6 +207,10 @@ public final class FancyHolograms extends JavaPlugin implements FancyHologramsPl
 
     public @NotNull VersionConfig getVersionConfig() {
         return versionConfig;
+    }
+
+    public @NotNull HologramPageService getHologramPageService() {
+        return hologramPageService;
     }
 
     @ApiStatus.Internal
@@ -289,6 +296,7 @@ public final class FancyHolograms extends JavaPlugin implements FancyHologramsPl
 
         if (PluginUtils.isFancyNpcsEnabled()) {
             getServer().getPluginManager().registerEvents(new NpcListener(this), this);
+            getServer().getPluginManager().registerEvents(new NpcPageListener(this), this);
         }
 
         if (FHFeatureFlags.DISABLE_HOLOGRAMS_FOR_BEDROCK_PLAYERS.isEnabled() && PluginUtils.isFloodgateEnabled()) {
