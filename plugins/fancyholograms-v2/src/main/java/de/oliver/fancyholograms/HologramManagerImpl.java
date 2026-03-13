@@ -165,6 +165,7 @@ public final class HologramManagerImpl implements HologramManager {
         FancyHolograms.get().getHologramThread().submit(() -> {
             Bukkit.getPluginManager().callEvent(new HologramsLoadedEvent(ImmutableList.copyOf(allLoaded)));
             for (Hologram hologram : allLoaded) {
+                plugin.getHologramPageService().applyInitialDisplay(hologram);
                 if (hologram.getData().getLinkedNpcName() != null) {
                     syncHologramWithNpc(hologram);
                 }
@@ -188,6 +189,7 @@ public final class HologramManagerImpl implements HologramManager {
         FancyHolograms.get().getHologramThread().submit(() -> {
             Bukkit.getPluginManager().callEvent(new HologramsLoadedEvent(ImmutableList.copyOf(loaded)));
             for (Hologram hologram : loaded) {
+                plugin.getHologramPageService().applyInitialDisplay(hologram);
                 if (hologram.getData().getLinkedNpcName() != null) {
                     syncHologramWithNpc(hologram);
                 }
@@ -271,6 +273,7 @@ public final class HologramManagerImpl implements HologramManager {
     }
 
     public void unloadHolograms() {
+        plugin.getHologramPageService().clear();
         FancyHolograms.get().getHologramThread().submit(() -> {
             List<Hologram> unloaded = new ArrayList<>();
 
@@ -291,6 +294,7 @@ public final class HologramManagerImpl implements HologramManager {
     }
 
     public void unloadHolograms(String world) {
+        plugin.getHologramPageService().clear();
         final var online = List.copyOf(Bukkit.getOnlinePlayers());
 
         FancyHolograms.get().getHologramThread().submit(() -> {
